@@ -1,16 +1,44 @@
 <html>
   <head>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-router/dist/vue-router.js"></script>
   </head>
 
   <body>
     <div id="app">
+      <router-link to="/top">top page</router-link>
+      <router-link to="/question/1">question 1 page</router-link>
+      <router-link to="/result">result page</router-link>
+      <router-view></router-view>
     </div>
 
     <script>
-      new Vue({
-        el: '#app',
+      var router = new VueRouter({
+          routes: [
+            {
+              path: '/top',
+              component: {
+                template: '<div>this is a top page</div>'
+              }
+            },
+            {
+              path: '/question/:questionId',
+              component: {
+                template: '<div>this is a question page questionId {{ $route.params.questionId }}</div>'
+              }
+            },
+            {
+              path: '/result',
+              component: {
+                template: '<div>this is a result page</div>'
+              }
+            },
+          ]
       })
+
+      new Vue({
+        router: router
+      }).$mount('#app')
     </script>
   </body>
 </html>

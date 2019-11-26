@@ -18,7 +18,7 @@
             {
               path: '/top',
               component: {
-                template: '<div>this is a top page</div>'
+                template: '#top'
               }
             },
             {
@@ -37,7 +37,7 @@
       })
 
       new Vue({
-        router: router
+        router: router,
         data: function () {
           return {
             "Analytics": [
@@ -85,6 +85,10 @@
           }
         }
       }).$mount('#app')
+    </script>
+
+    <script type="text/x-template" id="top">
+      AWS Icon Quiz
     </script>
   </body>
 </html>

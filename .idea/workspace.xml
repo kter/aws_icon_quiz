@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="00575326-19f0-47e8-9a2b-b0d42e0272ac" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/aws_icon_quiz.time" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/aws_icon_quiz.time" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -46,8 +47,23 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1574693015504</updated>
-      <workItem from="1574693016880" duration="1180000" />
+      <workItem from="1574693016880" duration="1813000" />
     </task>
+    <task id="LOCAL-00001" summary="Vue Router init">
+      <created>1574696202200</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1574696202200</updated>
+    </task>
+    <task id="LOCAL-00002" summary="editor settings">
+      <created>1574696215386</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1574696215386</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -63,5 +79,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Vue Router init" />
+    <MESSAGE value="editor settings" />
+    <option name="LAST_COMMIT_MESSAGE" value="editor settings" />
   </component>
 </project>

@@ -12,14 +12,20 @@
       <router-view></router-view>
     </div>
 
+    <script type="text/x-template" id="top">
+      <h1>AWS Icon Quiz</h1>
+    </script>
+
     <script>
+      var topPage = {
+        template: '#top'
+      }
+
       var router = new VueRouter({
           routes: [
             {
               path: '/top',
-              component: {
-                template: '#top'
-              }
+              component: topPage
             },
             {
               path: '/question/:questionId',
@@ -85,10 +91,6 @@
           }
         }
       }).$mount('#app')
-    </script>
-
-    <script type="text/x-template" id="top">
-      AWS Icon Quiz
     </script>
   </body>
 </html>

@@ -7,7 +7,7 @@
   <body>
     <div id="app">
       <router-link to="/top">top page</router-link>
-      <router-link to="/question/1">question 1 page</router-link>
+      <router-link :to="{ name: 'questions', params: { questionId: 1 }}">question 1 page</router-link>
       <router-link to="/result">result page</router-link>
       <router-view></router-view>
     </div>
@@ -16,7 +16,9 @@
       <div>
         <h1>AWS Icon Quiz</h1>
         <div>
-          <router-link :to="{ name: 'question', params: { id: question.id }}">question {{ question.id }} page</router-link>
+          <router-link :to="{ path: 'questions', params: { questionId: this.$routes.params.questionId }}">
+            hoge
+          </router-link>
         </div>
       </div>
     </script>
@@ -24,14 +26,6 @@
     <script>
       var topPage = {
         template: '#top',
-        data: function () {
-          return {
-            // 初回質問番号
-            question: {
-              id: 1
-            }
-          }
-        },
         methods: {
           fetchQuestion: function () {
             this.id = this.$route.params.id + 1
@@ -52,9 +46,10 @@
               component: topPage
             },
             {
-              path: '/question/:questionId',
+              path: '/questions/:questionId',
+              name: 'questions',
               component: {
-                template: '<div>this is a question page questionId {{ $route.params.questionId }}</div>' 
+                template: '<div>this is a question page</div>'
               }
             },
             {
@@ -66,10 +61,13 @@
           ]
       })
 
-      new Vue({
+      var vm = new Vue({
         router: router,
         data: function () {
           return {
+            "Question": {
+              id: 1,
+            },
             "Analytics": [
               {
                 file_path: "Athena.png",

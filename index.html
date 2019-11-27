@@ -13,12 +13,36 @@
     </div>
 
     <script type="text/x-template" id="top">
-      <h1>AWS Icon Quiz</h1>
+      <div>
+        <h1>AWS Icon Quiz</h1>
+        <div>
+          <router-link :to="{ name: 'question', params: { id: question.id }}">question {{ question.id }} page</router-link>
+        </div>
+      </div>
     </script>
 
     <script>
       var topPage = {
-        template: '#top'
+        template: '#top',
+        data: function () {
+          return {
+            // 初回質問番号
+            question: {
+              id: 1
+            }
+          }
+        },
+        methods: {
+          fetchQuestion: function () {
+            this.id = this.$route.params.id + 1
+          }
+        },
+        created: function () {
+          this.fetchQuestion()
+        },
+        watch: {
+          '$route': 'fetchQuestion'
+        }
       }
 
       var router = new VueRouter({
@@ -30,7 +54,7 @@
             {
               path: '/question/:questionId',
               component: {
-                template: '<div>this is a question page questionId {{ $route.params.questionId }}</div>'
+                template: '<div>this is a question page questionId {{ $route.params.questionId }}</div>' 
               }
             },
             {

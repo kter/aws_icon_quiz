@@ -7,7 +7,7 @@
   <body>
     <div id="app">
       <router-link to="/top">top page</router-link>
-      <router-link :to="{ name: 'questions', params: { questionId: 1 }}">question 1 page</router-link>
+      <router-link :to="{ name: 'questions', params: { questionId: 1 }}" :questionId="Question.id">question 1 page</router-link>
       <router-link to="/result">result page</router-link>
       <router-view></router-view>
     </div>
@@ -16,8 +16,8 @@
       <div>
         <h1>AWS Icon Quiz</h1>
         <div>
-          <router-link :to="{ path: 'questions', params: { questionId: this.$routes.params.questionId }}">
-            hoge
+          <router-link :to="{ name: 'questions', params: { questionId: questionId }}">
+            {{ this.$route.params.questionId }}
           </router-link>
         </div>
       </div>
@@ -43,6 +43,7 @@
           routes: [
             {
               path: '/top',
+              name: 'top',
               component: topPage
             },
             {
@@ -54,6 +55,7 @@
             },
             {
               path: '/result',
+              name: 'result',
               component: {
                 template: '<div>this is a result page</div>'
               }

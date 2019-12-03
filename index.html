@@ -18,105 +18,118 @@
       <div>
         <h1>AWS Icon Quiz</h1>
         <div>
-          <router-link :to="{ name: 'questions', params: { questionId: questionId }}">
-            {{ this.$route.params.questionId }}
+          <router-link :to="{ name: 'questions', params: { questionId: 1 }}">
+            はじめる
           </router-link>
         </div>
       </div>
     </script>
 
+    <script type="text/x-template" id="questions">
+        <div>
+            <h1>AWS Icon Quiz</h1>
+            <div>
+                <router-link :to="{ name: 'questions', params: { questionId: id }}">
+                    {{ this.$route.params.questionId }}
+                </router-link>
+            </div>
+        </div>
+    </script>
+
     <script>
-      var topPage = {
-        template: '#top',
-        methods: {
-          fetchQuestion: function () {
-            this.id = this.$route.params.id + 1
-          }
-        },
-        created: function () {
-          this.fetchQuestion()
-        },
-        watch: {
-          '$route': 'fetchQuestion'
+        var questionPage = {
+            template: '#questions',
+            methods: {
+                fetchQuestion: function () {
+                    this.id = this.$route.params.id + 1
+                }
+            },
+            created: function () {
+                this.fetchQuestion()
+            },
+            watch: {
+                '$route': 'fetchQuestion'
+            }
         }
-      }
 
-      var router = new VueRouter({
-          routes: [
-            {
-              path: '/top',
-              name: 'top',
-              component: topPage
-            },
-            {
-              path: '/questions/:questionId',
-              name: 'questions',
-              component: {
-                template: '<div>this is a question page</div>'
-              }
-            },
-            {
-              path: '/result',
-              name: 'result',
-              component: {
-                template: '<div>this is a result page</div>'
-              }
-            },
-          ]
-      })
+        var topPage = {
+            template: '#top',
+        }
 
-      var vm = new Vue({
-        router: router,
-        data: function () {
-          return {
-            "Question": {
-              id: 1,
-            },
-            "Analytics": [
-              {
-                file_path: "Athena.png",
-                name: "Amazon Athena",
-              },
-              {
-                file_path: "CloudSearch.png",
-                name: "Amazon CloudSearch",
-              },
-              {
-                file_path: "Data-Pipeline.png",
-                name: "AWS Data Pipeline",
-              },
-              {
-                file_path: "Elasticsearch-Service.png",
-                name: "Amazon Elasticsearch Service",
-              },
-              {
-                file_path: "EMR.png",
-                name: "Amazon EMR",
-              },
-              {
-                file_path: "Glue.png",
-                name: "AWS Glue",
-              },
-              {
-                file_path: "Kinesis.png",
-                name: "Amazon Kinesis",
-              },
-              {
-                file_path: "Lake-Formation.png",
-                name: "AWS Lake Formation",
-              },
-              {
-                file_path: "Quicksight.png",
-                name: "Amazon QuickSight",
-              },
-              {
-                file_path: "Redshift.png",
-                name: "Amazon Redshift",
-              }
+        var router = new VueRouter({
+            routes: [
+                {
+                    path: '/top',
+                    name: 'top',
+                    component: topPage
+                },
+                {
+                    path: '/questions/:questionId',
+                    name: 'questions',
+                    component: questionPage
+                },
+                {
+                    path: '/result',
+                    name: 'result',
+                    component: {
+                        template: '<div>this is a result page</div>'
+                    }
+                },
             ]
-          }
-        }
-      }).$mount('#app')
+        })
+
+        var vm = new Vue({
+            router: router,
+            data: function () {
+                return {
+                    "Question": {
+                        id: 1,
+                    },
+                    "Analytics": [
+                        {
+                            file_path: "Athena.png",
+                            name: "Amazon Athena",
+                        },
+                        {
+                            file_path: "CloudSearch.png",
+                            name: "Amazon CloudSearch",
+                        },
+                        {
+                            file_path: "Data-Pipeline.png",
+                            name: "AWS Data Pipeline",
+                        },
+                        {
+                            file_path: "Elasticsearch-Service.png",
+                            name: "Amazon Elasticsearch Service",
+                        },
+                        {
+                            file_path: "EMR.png",
+                            name: "Amazon EMR",
+                        },
+                        {
+                            file_path: "Glue.png",
+                            name: "AWS Glue",
+                        },
+                        {
+                            file_path: "Kinesis.png",
+                            name: "Amazon Kinesis",
+                        },
+                        {
+                            file_path: "Lake-Formation.png",
+                            name: "AWS Lake Formation",
+                        },
+                        {
+                            file_path: "Quicksight.png",
+                            name: "Amazon QuickSight",
+                        },
+                        {
+                            file_path: "Redshift.png",
+                            name: "Amazon Redshift",
+                        }
+                    ]
+                }
+            }
+        }).$mount('#app')
     </script>
   </body>
 </html>

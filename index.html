@@ -29,8 +29,8 @@
         <div>
             <h1>AWS Icon Quiz</h1>
             <div>
-                <router-link :to="{ name: 'questions', params: { questionId: id }}">
-                    {{ this.$route.params.questionId }}
+                <router-link :to="{ name: 'questions', params: { questionId: parseInt(this.$route.params.questionId) + 1 }}">
+                    次へ
                 </router-link>
             </div>
         </div>

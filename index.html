@@ -49,15 +49,19 @@
         var questionPage = {
             template: '#questions',
             methods: {
-                fetchQuestion: function () {
+                fetchQuestion: function (order) {
+                    if (typeof(order) === 'undefined') {
+                        order = parseInt(this.$route.params.questionId) + 1;
+                    }
+                    console.log('order: ' + order);
                     const answerCount = 4;
                     // 1. ランダムにカテゴリを１つ選択
-                    const categoryCount = Object.keys(this._data).length;
+                    const categoryCount = Object.keys(this._data['Category']).length;
                     let questionCategory = {};
                     // 選択したカテゴリにサービスが回答候補数以上なかったらカテゴリを再選定
                     while (true) {
-                        let questionCategoryName = Object.keys(this._data)[this.getRandomInt(categoryCount)];
-                        questionCategory = this._data[questionCategoryName];
+                        let questionCategoryName = Object.keys(this._data['Category'])[this.getRandomInt(categoryCount)];
+                        questionCategory = this._data['Category'][questionCategoryName];
                         if (questionCategory.length >= answerCount){
                             break;
                         }
@@ -69,7 +73,7 @@
                     // 3. 選択したカテゴリから3つサービスを選択（回答候補サービス）
                     const answerServices = this.arrayShuffle(questionCategory).slice(0, answerCount - 1);
 
-                    return {
+                    this.Questions[order] = {
                         question: questionService,
                         answer: answerServices
                     };
@@ -94,85 +98,88 @@
                 },
             },
             created: function () {
-                this.fetchQuestion()
+                this.fetchQuestion(parseInt(this.$route.params.questionId))
             },
             watch: {
                 '$route': 'fetchQuestion'
             },
             data: function () {
                 return {
-                    "Analytics": [
-                        {
-                            file_path: "Athena.png",
-                            name: "Amazon Athena",
-                        },
-                        {
-                            file_path: "CloudSearch.png",
-                            name: "Amazon CloudSearch",
-                        },
-                        {
-                            file_path: "Data_Pipeline.png",
-                            name: "AWS Data Pipeline",
-                        },
-                        {
-                            file_path: "Elasticsearch_Service.png",
-                            name: "Amazon Elasticsearch Service",
-                        },
-                        {
-                            file_path: "EMR.png",
-                            name: "Amazon EMR",
-                        },
-                        {
-                            file_path: "Glue.png",
-                            name: "AWS Glue",
-                        },
-                        {
-                            file_path: "Kinesis.png",
-                            name: "Amazon Kinesis",
-                        },
-                        {
-                            file_path: "Lake_Formation.png",
-                            name: "AWS Lake Formation",
-                        },
-                        {
-                            file_path: "Quicksight.png",
-                            name: "Amazon QuickSight",
-                        },
-                        {
-                            file_path: "Redshift.png",
-                            name: "Amazon Redshift",
-                        }
-                    ],
-                    "Application-Integration": [
-                        {
-                            file_path: "AWS-Step-Functions.png",
-                            name: "AWS Step Functions",
-                        },
-                        {
-                            file_path: "Amazon-AppSync.png",
-                            name: "Amazon AppSync",
-                        },
-                        {
-                            file_path: "Amazon-EventBridge.png",
-                            name: "Amazon EventBridge",
-                        },
-                        {
-                            file_path: "Amazon-MQ.png",
-                            name: "Amazon MQ",
-                        },
-                        {
-                            file_path: "Amazon-Simple-Notification-Service-SNS.png",
-                            name: "Amazon Simple Notification Service",
-                        },
-                        {
-                            file_path: "Amazon-Simple-Queue-Service-SQS.png",
-                            name: "Amazon Simple Queue Service",
-                        },
-                        {
-                            file_path: "Application-Integration.png",
-                            name: "Application Integration",
-                        },
-                    ]
+                    "Questions": [],
+                    "Category" : {
+                        "Analytics": [
+                            {
+                                file_path: "Athena.png",
+                                name: "Amazon Athena",
+                            },
+                            {
+                                file_path: "CloudSearch.png",
+                                name: "Amazon CloudSearch",
+                            },
+                            {
+                                file_path: "Data_Pipeline.png",
+                                name: "AWS Data Pipeline",
+                            },
+                            {
+                                file_path: "Elasticsearch_Service.png",
+                                name: "Amazon Elasticsearch Service",
+                            },
+                            {
+                                file_path: "EMR.png",
+                                name: "Amazon EMR",
+                            },
+                            {
+                                file_path: "Glue.png",
+                                name: "AWS Glue",
+                            },
+                            {
+                                file_path: "Kinesis.png",
+                                name: "Amazon Kinesis",
+                            },
+                            {
+                                file_path: "Lake_Formation.png",
+                                name: "AWS Lake Formation",
+                            },
+                            {
+                                file_path: "Quicksight.png",
+                                name: "Amazon QuickSight",
+                            },
+                            {
+                                file_path: "Redshift.png",
+                                name: "Amazon Redshift",
+                            }
+                        ],
+                        "Application-Integration": [
+                            {
+                                file_path: "AWS-Step-Functions.png",
+                                name: "AWS Step Functions",
+                            },
+                            {
+                                file_path: "Amazon-AppSync.png",
+                                name: "Amazon AppSync",
+                            },
+                            {
+                                file_path: "Amazon-EventBridge.png",
+                                name: "Amazon EventBridge",
+                            },
+                            {
+                                file_path: "Amazon-MQ.png",
+                                name: "Amazon MQ",
+                            },
+                            {
+                                file_path: "Amazon-Simple-Notification-Service-SNS.png",
+                                name: "Amazon Simple Notification Service",
+                            },
+                            {
+                                file_path: "Amazon-Simple-Queue-Service-SQS.png",
+                                name: "Amazon Simple Queue Service",
+                            },
+                            {
+                                file_path: "Application-Integration.png",
+                                name: "Application Integration",
+                            },
+                        ]
+                    }
                 }
             }
         }

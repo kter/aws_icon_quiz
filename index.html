@@ -50,8 +50,8 @@
             template: '#questions',
             methods: {
                 fetchQuestion: function (order) {
-                    if (typeof(order) === 'undefined') {
-                        order = parseInt(this.$route.params.questionId) + 1;
+                    if (typeof(order) === 'object') {
+                        order = parseInt(this.$route.params.questionId);
                     }
                     console.log('order: ' + order);
                     const answerCount = 4;

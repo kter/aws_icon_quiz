@@ -8,7 +8,7 @@
 
   <body>
     <div id="app">
-      <router-link to="/top">最初に戻る</router-link>
+      <router-link to="/top">トップページに戻る</router-link>
       <router-view></router-view>
     </div>
 
@@ -26,7 +26,7 @@
     <script type="text/x-template" id="questions">
         <div>
             <h1>AWS Icon Quiz</h1>
-            <question :question="this.Questions[parseInt(this.$route.params.questionId)]"></question>
+            <question :question="this.Questions[parseInt(this.$route.params.questionId)]" :player-answers="this.playerAnswers" :order="parseInt(this.$route.params.questionId)"></question>
             <div>
                 <router-link :to="{ name: 'questions', params: { questionId: parseInt(this.$route.params.questionId) + 1 }}">
                     次へ
@@ -43,7 +43,8 @@
             <div>
                 Answers:
                 <div v-for="answer in question.answer" :key="answer.name">
-                    {{ answer.name }}
+                    <input type="radio" :id="`${answer.name}`" :value="`${answer.name}`" v-model="playerAnswers[order]">
+                    <label :for="`${answer.name}`">{{ answer.name }}</label>
                 </div>
             </div>
         </div>
@@ -58,6 +59,12 @@
             props: {
                 question: {
                     type: Object
+                },
+                playerAnswers: {
+                    type: Object
+                },
+                order: {
+                    type: Number
                 }
             }
         });
@@ -132,6 +139,7 @@
             data: function () {
                 return {
                     "Questions": [],
+                    "playerAnswers": {},
                     "Category" : {
                         "Analytics": [
                             {

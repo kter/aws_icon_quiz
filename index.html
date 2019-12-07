@@ -26,7 +26,7 @@
     <script type="text/x-template" id="questions">
         <div>
             <h1>AWS Icon Quiz</h1>
-            <question></question>
+            <question :question="this.Questions[parseInt(this.$route.params.questionId)]"></question>
             <div>
                 <router-link :to="{ name: 'questions', params: { questionId: parseInt(this.$route.params.questionId) + 1 }}">
                     次へ
@@ -35,13 +35,32 @@
         </div>
     </script>
 
+    <script type="text/x-template" id="question">
+        <div>
+            <div>
+                Question: {{ question.question.name }}
+            </div>
+            <div>
+                Answers:
+                <div v-for="answer in question.answer" :key="answer.name">
+                    {{ answer.name }}
+                </div>
+            </div>
+        </div>
+    </script>
+
     <script>
         /*
          * Questionコンポーネント
          */
-        var question = {
-
-        };
+        Vue.component('question', {
+            template: '#question',
+            props: {
+                question: {
+                    type: Object
+                }
+            }
+        });
 
         /*
          * Questionsコンポーネント

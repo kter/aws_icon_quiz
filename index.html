@@ -68,14 +68,30 @@
                     }
 
                     // 2. 選択したカテゴリから1つサービスを選択（出題サービス）
-                    const questionService = questionCategory[this.getRandomInt(questionCategory.length)];
+                    const questionServiceOrder = this.getRandomInt(questionCategory.length);
+                    const questionService = questionCategory[questionServiceOrder];
 
                     // 3. 選択したカテゴリから3つサービスを選択（回答候補サービス）
-                    const answerServices = this.arrayShuffle(questionCategory).slice(0, answerCount - 1);
+                    // 正解サービスが2個でないよう、予め正解を抜いておく (後で正解サービスは入れる)
+                    let tmpQuestionCategory = questionCategory;
+                    delete tmpQuestionCategory[questionServiceOrder];
+                    let answerServices = this.arrayShuffle(tmpQuestionCategory).slice(0, answerCount - 1);
+
+                    // 4. 正解サービスを回答リストに入れる
+                    for (let i = 0; i <= answerServices.length; i++) {
+                        // 回答リストにemptyがあればそこに入れる
+                        if (typeof(answerServices[i]) === "undefined") {
+                            answerServices[i] = questionService;
+                            break;
+                        // 回答リストにemptyがなければ末尾に入れる
+                        } else if (i === answerServices.length) {
+                            answerServices[answerServices.length] = questionService;
+                        }
+                    }
 
                     this.Questions[order] = {
                         question: questionService,
-                        answer: answerServices
+                        answer: this.arrayShuffle(answerServices)
                     };
                 },
                 getRandomInt: function (max) {

@@ -26,6 +26,7 @@
     <script type="text/x-template" id="questions">
         <div>
             <h1>AWS Icon Quiz</h1>
+            <question></question>
             <div>
                 <router-link :to="{ name: 'questions', params: { questionId: parseInt(this.$route.params.questionId) + 1 }}">
                     次へ
@@ -36,27 +37,143 @@
 
     <script>
         /*
+         * Questionコンポーネント
+         */
+        var question = {
+
+        };
+
+        /*
          * Questionsコンポーネント
          */
         var questionPage = {
             template: '#questions',
-            props: ['questions'],
             methods: {
                 fetchQuestion: function () {
-                    console.log('called fetchQuestion');
-                    console.log(this.props);
-                }
+                    const answerCount = 4;
+                    // 1. ランダムにカテゴリを１つ選択
+                    const categoryCount = Object.keys(this._data).length;
+                    let questionCategory = {};
+                    // 選択したカテゴリにサービスが回答候補数以上なかったらカテゴリを再選定
+                    while (true) {
+                        let questionCategoryName = Object.keys(this._data)[this.getRandomInt(categoryCount)];
+                        questionCategory = this._data[questionCategoryName];
+                        if (questionCategory.length >= answerCount){
+                            break;
+                        }
+                    }
+
+                    // 2. 選択したカテゴリから1つサービスを選択（出題サービス）
+                    const questionService = questionCategory[this.getRandomInt(questionCategory.length)];
+
+                    // 3. 選択したカテゴリから3つサービスを選択（回答候補サービス）
+                    const answerServices = this.arrayShuffle(questionCategory).slice(0, answerCount - 1);
+
+                    return {
+                        question: questionService,
+                        answer: answerServices
+                    };
+                },
+                getRandomInt: function (max) {
+                    return Math.floor(Math.random() * Math.floor(max));
+                },
+                arrayShuffle: function (array) {
+                    let i, j, temp;
+                    array = array.slice();
+                    i = array.length;
+                    if (i === 0) {
+                        return array;
+                    }
+                    while (--i) {
+                        j = Math.floor(Math.random() * (i + 1));
+                        temp = array[i];
+                        array[i] = array[j];
+                        array[j] = temp;
+                    }
+                    return array;
+                },
             },
             created: function () {
                 this.fetchQuestion()
             },
-            computed: {
-                question: function () {
-                    return this.questions
-                }
-            },
             watch: {
                 '$route': 'fetchQuestion'
+            },
+            data: function () {
+                return {
+                    "Analytics": [
+                        {
+                            file_path: "Athena.png",
+                            name: "Amazon Athena",
+                        },
+                        {
+                            file_path: "CloudSearch.png",
+                            name: "Amazon CloudSearch",
+                        },
+                        {
+                            file_path: "Data_Pipeline.png",
+                            name: "AWS Data Pipeline",
+                        },
+                        {
+                            file_path: "Elasticsearch_Service.png",
+                            name: "Amazon Elasticsearch Service",
+                        },
+                        {
+                            file_path: "EMR.png",
+                            name: "Amazon EMR",
+                        },
+                        {
+                            file_path: "Glue.png",
+                            name: "AWS Glue",
+                        },
+                        {
+                            file_path: "Kinesis.png",
+                            name: "Amazon Kinesis",
+                        },
+                        {
+                            file_path: "Lake_Formation.png",
+                            name: "AWS Lake Formation",
+                        },
+                        {
+                            file_path: "Quicksight.png",
+                            name: "Amazon QuickSight",
+                        },
+                        {
+                            file_path: "Redshift.png",
+                            name: "Amazon Redshift",
+                        }
+                    ],
+                    "Application-Integration": [
+                        {
+                            file_path: "AWS-Step-Functions.png",
+                            name: "AWS Step Functions",
+                        },
+                        {
+                            file_path: "Amazon-AppSync.png",
+                            name: "Amazon AppSync",
+                        },
+                        {
+                            file_path: "Amazon-EventBridge.png",
+                            name: "Amazon EventBridge",
+                        },
+                        {
+                            file_path: "Amazon-MQ.png",
+                            name: "Amazon MQ",
+                        },
+                        {
+                            file_path: "Amazon-Simple-Notification-Service-SNS.png",
+                            name: "Amazon Simple Notification Service",
+                        },
+                        {
+                            file_path: "Amazon-Simple-Queue-Service-SQS.png",
+                            name: "Amazon Simple Queue Service",
+                        },
+                        {
+                            file_path: "Application-Integration.png",
+                            name: "Application Integration",
+                        },
+                    ]
+                }
             }
         }
 
@@ -78,7 +195,6 @@
                     path: '/questions/:questionId',
                     name: 'questions',
                     component: questionPage,
-                    props: this.Analytics
                 },
                 {
                     path: '/result',
@@ -92,52 +208,6 @@
 
         var vm = new Vue({
             router: router,
-            data: function () {
-                return {
-                    "Analytics": [
-                        {
-                            file_path: "Athena.png",
-                            name: "Amazon Athena",
-                        },
-                        {
-                            file_path: "CloudSearch.png",
-                            name: "Amazon CloudSearch",
-                        },
-                        {
-                            file_path: "Data-Pipeline.png",
-                            name: "AWS Data Pipeline",
-                        },
-                        {
-                            file_path: "Elasticsearch-Service.png",
-                            name: "Amazon Elasticsearch Service",
-                        },
-                        {
-                            file_path: "EMR.png",
-                            name: "Amazon EMR",
-                        },
-                        {
-                            file_path: "Glue.png",
-                            name: "AWS Glue",
-                        },
-                        {
-                            file_path: "Kinesis.png",
-                            name: "Amazon Kinesis",
-                        },
-                        {
-                            file_path: "Lake-Formation.png",
-                            name: "AWS Lake Formation",
-                        },
-                        {
-                            file_path: "Quicksight.png",
-                            name: "Amazon QuickSight",
-                        },
-                        {
-                            file_path: "Redshift.png",
-                            name: "Amazon Redshift",
-                        }
-                    ]
-                }
-            }
         }).$mount('#app')
     </script>
   </body>

@@ -55,7 +55,38 @@
         </div>
     </script>
 
+    <script type="text/x-template" id="result">
+        <div>
+            <div>
+                結果発表
+            </div>
+            <div>
+                あなたの得点は…
+                <div>
+                    {{ getScore() }}
+                </div>
+                でした！
+            </div>
+        </div>
+    </script>
+
     <script>
+        /*
+         * Questionコンポーネント
+         */
+        var resultPage = {
+            template: '#result',
+            props: {
+                playerAnswers: {
+                    type: Object
+                }
+            },
+            methods: {
+                getScore: function () {
+                }
+            }
+        };
+
         /*
          * Questionコンポーネント
          */
@@ -248,12 +279,10 @@
                 {
                     path: '/result',
                     name: 'result',
-                    component: {
-                        template: '<div>this is a result page</div>'
-                    }
+                    component: resultPage,
                 },
             ]
-        })
+        });
 
         var vm = new Vue({
             router: router,

@@ -27,11 +27,16 @@
         <div>
             <h1>AWS Icon Quiz</h1>
             <question :question="this.Questions[parseInt(this.$route.params.questionId)]" :player-answers="this.playerAnswers" :order="parseInt(this.$route.params.questionId)"></question>
-            <div>
-                <router-link :to="{ name: 'questions', params: { questionId: parseInt(this.$route.params.questionId) + 1 }}">
-                    次へ
-                </router-link>
-            </div>
+                <div v-if="isLastQuestion()">
+                    <router-link :to="{ name: 'result' }">
+                        答え合わせ
+                    </router-link>
+                </div>
+                <div v-else>
+                    <router-link :to="{ name: 'questions', params: { questionId: parseInt(this.$route.params.questionId) + 1 }}">
+                        次へ
+                    </router-link>
+                </div>
         </div>
     </script>
 
@@ -79,7 +84,6 @@
                     if (typeof(order) === 'object') {
                         order = parseInt(this.$route.params.questionId);
                     }
-                    console.log('order: ' + order);
                     const answerCount = 4;
                     // 1. ランダムにカテゴリを１つ選択
                     const categoryCount = Object.keys(this._data['Category']).length;
@@ -129,6 +133,10 @@
                     }
                     return array;
                 },
+                isLastQuestion: function () {
+                    const numberOfQuestion = 20;
+                    return this.$route.params.questionId >= numberOfQuestion
+                }
             },
             created: function () {
                 this.fetchQuestion(parseInt(this.$route.params.questionId))

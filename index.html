@@ -35,7 +35,7 @@
                     <div>
                         Answers:
                         <div v-for="answer in this.Questions[parseInt(this.$route.params.questionId)].answer" :key="answer.name">
-                            <input type="radio" name="answer" :id="`${answer.name}`" :value="`${answer.name}`" v-model="playerAnswer">
+                            <input type="radio" name="answer" :id="`${answer.name}`" :value="`${answer.name}`" v-model="playerAnswer" :key="`${$route.params.questionId}`">
                             <label :for="`${answer.name}`">{{ answer.name }}</label>
                         </div>
                     </div>

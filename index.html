@@ -4,6 +4,7 @@
     <meta charset="utf-8"/>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue-router/dist/vue-router.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuex/dist/vuex.js"></script>
   </head>
 
   <body>
@@ -26,7 +27,19 @@
     <script type="text/x-template" id="questions">
         <div>
             <h1>AWS Icon Quiz</h1>
-            <question :question="this.Questions[parseInt(this.$route.params.questionId)]" :player-answers="this.playerAnswers" :order="parseInt(this.$route.params.questionId)"></question>
+            <form>
+                <div>
+                    <div>
+                        Question: {{ this.Questions[parseInt(this.$route.params.questionId)].question.name }}
+                    </div>
+                    <div>
+                        Answers:
+                        <div v-for="answer in this.Questions[parseInt(this.$route.params.questionId)].answer" :key="answer.name">
+                            <input type="radio" name="answer" :id="`${answer.name}`" :value="`${answer.name}`" v-model="playerAnswer">
+                            <label :for="`${answer.name}`">{{ answer.name }}</label>
+                        </div>
+                    </div>
+                </div>
                 <div v-if="isLastQuestion()">
                     <router-link :to="{ name: 'result' }">
                         答え合わせ
@@ -37,21 +50,7 @@
                         次へ
                     </router-link>
                 </div>
-        </div>
-    </script>
-
-    <script type="text/x-template" id="question">
-        <div>
-            <div>
-                Question: {{ question.question.name }}
-            </div>
-            <div>
-                Answers:
-                <div v-for="answer in question.answer" :key="answer.name">
-                    <input type="radio" :id="`${answer.name}`" :value="`${answer.name}`" v-model="playerAnswers[order]">
-                    <label :for="`${answer.name}`">{{ answer.name }}</label>
-                </div>
-            </div>
+            </form>
         </div>
     </script>
 
@@ -72,7 +71,21 @@
 
     <script>
         /*
-         * Questionコンポーネント
+         * Store
+         */
+        const store = new Vuex.Store({
+            state: {
+                "playerAnswers": {},
+            },
+            mutations: {
+                addAnswer(state, answer) {
+                    state.playerAnswers[answer.order] = answer.choosedAnswer;
+                }
+            },
+        });
+
+        /*
+         * Resultコンポーネント
          */
         var resultPage = {
             template: '#result',
@@ -84,26 +97,8 @@
             methods: {
                 getScore: function () {
                 }
-            }
+            },
         };
-
-        /*
-         * Questionコンポーネント
-         */
-        Vue.component('question', {
-            template: '#question',
-            props: {
-                question: {
-                    type: Object
-                },
-                playerAnswers: {
-                    type: Object
-                },
-                order: {
-                    type: Number
-                }
-            }
-        });
 
         /*
          * Questionsコンポーネント
@@ -167,6 +162,17 @@
                 isLastQuestion: function () {
                     const numberOfQuestion = 20;
                     return this.$route.params.questionId >= numberOfQuestion
+                },
+            },
+            store,
+            computed: {
+                playerAnswer: {
+                    get() {
+                        return this.$store.state.playerAnswers;
+                    },
+                    set(answer) {
+                        this.$store.commit("addAnswer", { choosedAnswer: answer, order: parseInt(this.$route.params.questionId) });
+                    }
                 }
             },
             created: function () {
@@ -178,7 +184,6 @@
             data: function () {
                 return {
                     "Questions": [],
-                    "playerAnswers": {},
                     "Category" : {
                         "Analytics": [
                             {

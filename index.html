@@ -129,7 +129,7 @@
 
                     // 3. 選択したカテゴリから3つサービスを選択（回答候補サービス）
                     // 正解サービスが2個でないよう、予め正解を抜いておく (後で正解サービスは入れる)
-                    let tmpQuestionCategory = questionCategory;
+                    let tmpQuestionCategory = JSON.parse(JSON.stringify(questionCategory));
                     tmpQuestionCategory.splice(questionServiceOrder, 1);
 
                     // 4. 正解サービスを回答リストに入れる
@@ -176,6 +176,7 @@
                 }
             },
             created: function () {
+                console.log('created');
                 this.fetchQuestion(parseInt(this.$route.params.questionId))
             },
             watch: {

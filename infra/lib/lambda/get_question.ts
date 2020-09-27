@@ -11,8 +11,8 @@ export const handler = async (event: any = {}): Promise<any> => {
 
   try {
     const response = await db.scan(params).promise();
-    console.log(JSON.stringify(response));
-    return { statusCode: 200, body: JSON.stringify(response.Item) };
+    console.log(JSON.stringify(response.Items));
+    return { statusCode: 200, body: JSON.stringify(response.Items) };
   } catch (dbError) {
     return { statusCode: 500, body: JSON.stringify(dbError) };
   }

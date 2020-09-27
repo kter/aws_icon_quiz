@@ -27,6 +27,7 @@ export class InfraStack extends cdk.Stack {
       environment: {
         TABLE_NAME: dynamoTable.tableName,
         CHOICES_NUM: "4",
+        QUESTIONS_NUM: "20",
       },
     });
 

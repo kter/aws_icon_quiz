@@ -20,29 +20,27 @@ export class InfraStack extends cdk.Stack {
       removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
     });
 
-    const getItemLambda = new lambda.Function(this, "getQuestionFunction", {
+    const getQuestionLambda = new lambda.Function(this, "getQuestionFunction", {
       code: new lambda.AssetCode("lib/lambda"),
       handler: "get_question.handler",
       runtime: lambda.Runtime.NODEJS_10_X,
       environment: {
         TABLE_NAME: dynamoTable.tableName,
-        PRIMARY_KEY: "serviceNameHash",
+        CHOICES_NUM: "4",
       },
     });
 
     // dynamodb読み取り権限をLambdaに付与
-    dynamoTable.grantReadData(getItemLambda);
+    dynamoTable.grantReadData(getQuestionLambda);
 
-    const api = new apigateway.RestApi(this, "itemsApi", {
-      restApiName: "Items Service",
+    const api = new apigateway.RestApi(this, "AWSQuizeApi", {
+      restApiName: "AWS Quize Service",
     });
 
-    const items = api.root.addResource("items");
-
-    const singleItem = items.addResource("{id}");
-    const getItemIntegration = new apigateway.LambdaIntegration(getItemLambda);
-    singleItem.addMethod("GET", getItemIntegration);
-    addCorsOptions(items);
+    const questions = api.root.addResource("questions");
+    const getItemIntegration = new apigateway.LambdaIntegration(getQuestionLambda);
+    questions.addMethod("GET", getItemIntegration);
+    addCorsOptions(questions);
   }
 }
 

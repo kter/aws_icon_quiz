@@ -19,8 +19,6 @@ export const handler = async (event: any = {}): Promise<any> => {
     try {
         const db = await dynamodb.scan(params).promise();
         console.log(db.Items[0]);
-        // const question_items: Array<string> = pickAnswers(shuffled_items);
-        // const answer_items: Array<string> = shuffled_items.slice(1);
         for (let i = 0; i < parseInt(QUESTIONS_NUM); i++) {
           // 全サービスリスト
           let shuffled_items: Array<quizeItem> = shuffle(db.Items);

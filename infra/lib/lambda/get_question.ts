@@ -30,7 +30,7 @@ export const handler = async (event: any = {}): Promise<any> => {
             answer_items.push(shuffled_items[j]['serviceName']);
           }
           // 正解を仕込む
-          answer_items.push(question_item['ServiceName']);
+          answer_items.push(question_item['serviceName']);
           // 正解と不正解をシャッフル
           answer_items = shuffle(answer_items);
           response_array.push(

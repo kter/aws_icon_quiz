@@ -18,7 +18,6 @@ export const handler = async (event: any = {}): Promise<any> => {
 
     try {
         const db = await dynamodb.scan(params).promise();
-        console.log(db.Items[0]);
         for (let i = 0; i < parseInt(QUESTIONS_NUM); i++) {
           // 全サービスリスト
           let shuffled_items: Array<quizeItem> = shuffle(db.Items);
@@ -26,7 +25,7 @@ export const handler = async (event: any = {}): Promise<any> => {
           let question_item: quizeItem = shuffled_items[0];
           // 回答リスト作成 (シャッフルした配列の1番目からCHOICES_NUM番目)
           let answer_items: Array<string> = [];
-          for (let j = 1; i < parseInt(CHOICES_NUM); j++) {
+          for (let j = 1; j < parseInt(CHOICES_NUM); j++) {
             answer_items.push(shuffled_items[j]['serviceName']);
           }
           response_array.push(

@@ -28,11 +28,11 @@ export const handler = async (event: any = {}): Promise<any> => {
           for (let j = 1; j < parseInt(CHOICES_NUM); j++) {
             // 不正解3問
             answer_items.push(shuffled_items[j]['serviceName']);
-            // 正解を仕込む
-            answer_items.push(question_item['ServiceName']);
-            // 正解と不正解をシャッフル
-            answer_items = shuffle(answer_items);
           }
+          // 正解を仕込む
+          answer_items.push(question_item['ServiceName']);
+          // 正解と不正解をシャッフル
+          answer_items = shuffle(answer_items);
           response_array.push(
             {
               'question': question_item['serviceNameHash'],

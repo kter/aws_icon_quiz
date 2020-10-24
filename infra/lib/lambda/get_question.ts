@@ -33,13 +33,12 @@ export const handler = async (event: any = {}): Promise<any> => {
             {
               'question': question_item['serviceNameHash'],
               'answer': answer_items,
+              'correct': question_item['serviceName']
             }
           );
         }
 
-
-        
-        return { statusCode: 200, body: JSON.stringify(db.Items) };
+        return { statusCode: 200, body: JSON.stringify(response_array) };
     } catch (dbError) {
         return { statusCode: 500, body: JSON.stringify(dbError) };
     }

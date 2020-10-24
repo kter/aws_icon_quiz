@@ -2,6 +2,7 @@ import * as cdk from '@aws-cdk/core';
 import * as dynamodb from "@aws-cdk/aws-dynamodb";
 import * as lambda from "@aws-cdk/aws-lambda";
 import * as apigateway from "@aws-cdk/aws-apigateway";
+import { Seeder } from 'aws-cdk-dynamodb-seeder';
 
 export class InfraStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -18,6 +19,13 @@ export class InfraStack extends cdk.Stack {
         type: dynamodb.AttributeType.STRING,
       },
       removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
+    });
+
+    new Seeder(this, "MySeeder", {
+      table: dynamoTable,
+      setup: require("./seed.json"),
+      teardown: require("./seed-delete.json"),
+      refreshOnUpdate: true  // runs setup and teardown on every update, default false
     });
 
     const getQuestionLambda = new lambda.Function(this, "getQuestionFunction", {

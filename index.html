@@ -31,10 +31,9 @@
             <form>
                 <div v-if="this.Questions[parseInt(this.$route.params.questionId)]">
                     <div>
-                        Question: {{ this.Questions[parseInt(this.$route.params.questionId)].question }}
+                        What's this service?: {{ this.Questions[parseInt(this.$route.params.questionId)].question }}
                     </div>
                     <div>
-                        Answers:
                         <div v-for="answer in this.Questions[parseInt(this.$route.params.questionId)].answer" :key="answer">
                             <input type="radio" name="answer" :id="`${answer}`" :value="`${answer}`" v-model="playerAnswer" :key="`${$route.params.questionId}`">
                             <label :for="`${answer}`">{{ answer }}</label>
@@ -47,8 +46,14 @@
                     </router-link>
                 </div>
                 <div v-else>
+                    <span v-if="! isFirstQuestion()">
+                        <router-link :to="{ name: 'questions', params: { questionId: parseInt(this.$route.params.questionId) - 1 }}">
+                            Previous
+                        </router-link>
+                    </span>
+                    &nbsp;&nbsp;/&nbsp;
                     <router-link :to="{ name: 'questions', params: { questionId: parseInt(this.$route.params.questionId) + 1 }}">
-                        次へ
+                        Next
                     </router-link>
                 </div>
             </form>
@@ -141,8 +146,10 @@
                         .then(response => (this.Questions = response.data))
                 },
                 isLastQuestion: function () {
-                    const numberOfQuestion = 20;
-                    return this.$route.params.questionId >= numberOfQuestion
+                    return this.$route.params.questionId >= question_num
+                },
+                isFirstQuestion: function () {
+                    return parseInt(this.$route.params.questionId) === 1
                 },
             },
             store,

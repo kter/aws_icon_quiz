@@ -31,13 +31,13 @@
             <form>
                 <div>
                     <div>
-                        Question: {{ this.Questions[parseInt(this.$route.params.questionId)].question.name }}
+                        Question: {{ this.Questions[parseInt(this.$route.params.questionId)].question }}
                     </div>
                     <div>
                         Answers:
-                        <div v-for="answer in this.Questions[parseInt(this.$route.params.questionId)].answer" :key="answer.name">
-                            <input type="radio" name="answer" :id="`${answer.name}`" :value="`${answer.name}`" v-model="playerAnswer" :key="`${$route.params.questionId}`">
-                            <label :for="`${answer.name}`">{{ answer.name }}</label>
+                        <div v-for="answer in this.Questions[parseInt(this.$route.params.questionId)].answer" :key="answer">
+                            <input type="radio" name="answer" :id="`${answer}`" :value="`${answer}`" v-model="playerAnswer" :key="`${$route.params.questionId}`">
+                            <label :for="`${answer}`">{{ answer }}</label>
                         </div>
                     </div>
                 </div>
@@ -107,10 +107,7 @@
         var questionPage = {
             template: '#questions',
             methods: {
-                fetchQuestion: function (order) {
-                    if (typeof(order) === 'object') {
-                        order = parseInt(this.$route.params.questionId);
-                    }
+                fetchQuestion: function () {
                     /**
                      * 想定レスポンス
                      * [
@@ -147,10 +144,7 @@
                 }
             },
             created: function () {
-                this.fetchQuestion(parseInt(this.$route.params.questionId))
-            },
-            watch: {
-                '$route': 'fetchQuestion'
+                this.fetchQuestion(parseInt())
             },
             data: function () {
                 return {

@@ -29,7 +29,7 @@
         <div>
             <h1>AWS Icon Quiz</h1>
             <form>
-                <div>
+                <div v-if="this.Questions[parseInt(this.$route.params.questionId)]">
                     <div>
                         Question: {{ this.Questions[parseInt(this.$route.params.questionId)].question }}
                     </div>

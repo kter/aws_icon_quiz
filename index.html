@@ -77,11 +77,15 @@
         const store = new Vuex.Store({
             state: {
                 "playerAnswers": {},
+                "Questions": {},
             },
             mutations: {
                 addAnswer(state, answer) {
                     state.playerAnswers[answer.order] = answer.choosedAnswer;
-                }
+                },
+                storeQuestions(state, questions) {
+                    state.Questions = questions;
+                },
             },
         });
 
@@ -141,16 +145,19 @@
                     set(answer) {
                         this.$store.commit("addAnswer", { choosedAnswer: answer, order: parseInt(this.$route.params.questionId) });
                     }
+                },
+                Questions: {
+                    get() {
+                        return this.$store.state.Questions;
+                    },
+                    set(questions) {
+                        this.$store.commit("storeQuestions", questions);
+                    }
                 }
             },
             created: function () {
                 this.fetchQuestion()
             },
-            data: function () {
-                return {
-                    "Questions": [],
-                }
-            }
         }
 
         /*

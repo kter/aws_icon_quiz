@@ -5,6 +5,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue-router/dist/vue-router.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vuex/dist/vuex.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
 
   <body>
@@ -110,54 +111,24 @@
                     if (typeof(order) === 'object') {
                         order = parseInt(this.$route.params.questionId);
                     }
-                    const answerCount = 4;
-                    // 1. ランダムにカテゴリを１つ選択
-                    const categoryCount = Object.keys(this._data['Category']).length;
-                    let questionCategory = {};
-                    // 選択したカテゴリにサービスが回答候補数以上なかったらカテゴリを再選定
-                    while (true) {
-                        let questionCategoryName = Object.keys(this._data['Category'])[this.getRandomInt(categoryCount)];
-                        questionCategory = this._data['Category'][questionCategoryName];
-                        if (questionCategory.length >= answerCount){
-                            break;
-                        }
-                    }
-
-                    // 2. 選択したカテゴリから1つサービスを選択（出題サービス）
-                    const questionServiceOrder = this.getRandomInt(questionCategory.length);
-                    const questionService = questionCategory[questionServiceOrder];
-
-                    // 3. 選択したカテゴリから3つサービスを選択（回答候補サービス）
-                    // 正解サービスが2個でないよう、予め正解を抜いておく (後で正解サービスは入れる)
-                    let tmpQuestionCategory = JSON.parse(JSON.stringify(questionCategory));
-                    tmpQuestionCategory.splice(questionServiceOrder, 1);
-
-                    // 4. 正解サービスを回答リストに入れる
-                    let answerServices = this.arrayShuffle(tmpQuestionCategory).slice(0, answerCount - 1);
-                    answerServices[answerServices.length] = questionService;
-
-                    this.Questions[order] = {
-                        question: questionService,
-                        answer: this.arrayShuffle(answerServices)
-                    };
-                },
-                getRandomInt: function (max) {
-                    return Math.floor(Math.random() * Math.floor(max));
-                },
-                arrayShuffle: function (array) {
-                    let i, j, temp;
-                    array = array.slice();
-                    i = array.length;
-                    if (i === 0) {
-                        return array;
-                    }
-                    while (--i) {
-                        j = Math.floor(Math.random() * (i + 1));
-                        temp = array[i];
-                        array[i] = array[j];
-                        array[j] = temp;
-                    }
-                    return array;
+                    /**
+                     * 想定レスポンス
+                     * [
+                     *    {
+                     *      "question": "4b88d56bd65ef92611ac63064c38369f",
+                     *      "answer": [
+                     *        "Amazon EMR",
+                     *        "Amazon EC2",
+                     *        "Amazon S3",
+                     *        "Amazon CloudWatch"
+                     *      ],
+                     *      "correct": "Amazon CloudWatch"
+                     *    },
+                     * ]
+                     */
+                    axios
+                        .get('https://uwnbp575z0.execute-api.us-east-1.amazonaws.com/prod/questions')
+                        .then(response => (this.Questions = response.data))
                 },
                 isLastQuestion: function () {
                     const numberOfQuestion = 20;
@@ -176,7 +147,6 @@
                 }
             },
             created: function () {
-                console.log('created');
                 this.fetchQuestion(parseInt(this.$route.params.questionId))
             },
             watch: {

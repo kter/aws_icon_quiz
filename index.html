@@ -63,7 +63,7 @@
             <div>
                 あなたの得点は…
                 <div>
-                    {{ getScore() }}
+                    20問中 {{ getScore() }}問正解
                 </div>
                 でした！
             </div>
@@ -71,6 +71,7 @@
     </script>
 
     <script>
+        const question_num = 20;
         /*
          * Store
          */
@@ -99,8 +100,16 @@
                     type: Object
                 }
             },
+            store,
             methods: {
                 getScore: function () {
+                    var score = 0;
+                    for (var i=0;i<question_num;i++) {
+                        if (this.$store.state.Questions[i].correct === this.$store.state.playerAnswers[i]) {
+                            score += 1;
+                        }
+                    }
+                    return score;
                 }
             },
         };
@@ -143,7 +152,7 @@
                         return this.$store.state.playerAnswers;
                     },
                     set(answer) {
-                        this.$store.commit("addAnswer", { choosedAnswer: answer, order: parseInt(this.$route.params.questionId) });
+                        this.$store.commit("addAnswer", { choosedAnswer: answer, order: parseInt(this.$route.params.questionId) - 1 });
                     }
                 },
                 Questions: {

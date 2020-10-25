@@ -42,26 +42,34 @@ export const handler = async (event: any = {}): Promise<any> => {
           );
         }
 
-        return { statusCode: 200, body: JSON.stringify(response_array) };
+        return {
+            statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Headers" : "Content-Type",
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+            },
+            body: JSON.stringify(response_array)
+        };
     } catch (dbError) {
         return { statusCode: 500, body: JSON.stringify(dbError) };
     }
 };
 
 function shuffle(items: Array<any>): Array<any> {
-  for (let i = items.length - 1; i > 0; i--) {
-    let r = Math.floor(Math.random() * (i + 1));
-    let tmp = items[i];
-    items[i] = items[r];
-    items[r] = tmp;
-  }
-  return items;
+    for (let i = items.length - 1; i > 0; i--) {
+        let r = Math.floor(Math.random() * (i + 1));
+        let tmp = items[i];
+        items[i] = items[r];
+        items[r] = tmp;
+    }
+    return items;
 };
 
 function pickAnswers(items: Array<string>): Array<string> {
-  let answers: Array<string> = [];
-  for (let i = 0; i < parseInt(CHOICES_NUM); i++) {
-    answers[i] = items[i];
-  }
-  return answers;
+    let answers: Array<string> = [];
+    for (let i = 0; i < parseInt(CHOICES_NUM); i++) {
+        answers[i] = items[i];
+    }
+    return answers;
 };

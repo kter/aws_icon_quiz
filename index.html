@@ -31,7 +31,7 @@
             <form>
                 <div v-if="this.Questions[parseInt(this.$route.params.questionId)]">
                     <div>
-                        What's this service?: {{ this.Questions[parseInt(this.$route.params.questionId)].question }}
+                        What's this service?: <img :src="'https://d1iwaq3xxqsfn2.cloudfront.net/' + this.Questions[parseInt(this.$route.params.questionId)].question + '.png'"/>
                     </div>
                     <div>
                         <div v-for="answer in this.Questions[parseInt(this.$route.params.questionId)].answer" :key="answer">

@@ -2,6 +2,7 @@ import * as cdk from '@aws-cdk/core';
 import * as dynamodb from "@aws-cdk/aws-dynamodb";
 import * as lambda from "@aws-cdk/aws-lambda";
 import * as apigateway from "@aws-cdk/aws-apigateway";
+import * as s3 from "@aws-cdk/aws-s3";
 
 export class InfraStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -42,6 +43,9 @@ export class InfraStack extends cdk.Stack {
     const getItemIntegration = new apigateway.LambdaIntegration(getQuestionLambda);
     questions.addMethod("GET", getItemIntegration);
     addCorsOptions(questions);
+
+    const bucket = new s3.Bucket(this, 'Buck', {
+    });
   }
 }
 

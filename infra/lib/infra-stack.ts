@@ -3,6 +3,9 @@ import * as dynamodb from "@aws-cdk/aws-dynamodb";
 import * as lambda from "@aws-cdk/aws-lambda";
 import * as apigateway from "@aws-cdk/aws-apigateway";
 import * as s3 from "@aws-cdk/aws-s3";
+import * as cloudfront from "@aws-cdk/aws-cloudfront";
+import * as iam from "@aws-cdk/aws-iam";
+import * as s3deploy from '@aws-cdk/aws-s3-deployment'
 
 export class InfraStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -14,7 +17,7 @@ export class InfraStack extends cdk.Stack {
         name: "serviceNameHash",
         type: dynamodb.AttributeType.STRING,
       },
-      sortKey:{ 
+      sortKey:{
         name: "serviceName",
         type: dynamodb.AttributeType.STRING,
       },
@@ -44,46 +47,110 @@ export class InfraStack extends cdk.Stack {
     questions.addMethod("GET", getItemIntegration);
     addCorsOptions(questions);
 
-    const bucket = new s3.Bucket(this, 'Buck', {
+    const bucket = new s3.Bucket(this, 'Bucket', {
+      websiteErrorDocument: 'index.html',
+      websiteIndexDocument: 'index.html',
+    });
+
+    // Create OriginAccessIdentity
+    const oai = new cloudfront.OriginAccessIdentity(this, "my-oai");
+
+    // Create Policy and attach to bucket
+    const myBucketPolicy = new iam.PolicyStatement({
+      effect: iam.Effect.ALLOW,
+      actions: ["s3:GetObject"],
+      principals: [
+        new iam.CanonicalUserPrincipal(
+            oai.cloudFrontOriginAccessIdentityS3CanonicalUserId
+        ),
+      ],
+      resources: [bucket.bucketArn + "/*"],
+    });
+
+    bucket.addToResourcePolicy(myBucketPolicy);
+
+    // Create CloudFront WebDistribution
+    const websiteDistribution = new cloudfront.CloudFrontWebDistribution(this, "WebsiteDistribution", {
+      viewerCertificate: {
+        aliases: [],
+        props: {
+          cloudFrontDefaultCertificate: true,
+        },
+      },
+      priceClass: cloudfront.PriceClass.PRICE_CLASS_ALL,
+      originConfigs: [
+        {
+          s3OriginSource: {
+            s3BucketSource: bucket,
+            originAccessIdentity: oai,
+          },
+          behaviors: [
+            {
+              isDefaultBehavior: true,
+            },
+          ],
+        },
+      ],
+      errorConfigurations: [
+        {
+          errorCode: 403,
+          responsePagePath: "/index.html",
+          responseCode: 200,
+          errorCachingMinTtl: 0,
+        },
+        {
+          errorCode: 404,
+          responsePagePath: "/index.html",
+          responseCode: 200,
+          errorCachingMinTtl: 0,
+        },
+      ],
+    });
+
+    new s3deploy.BucketDeployment(this, 'WebsiteDeploy', {
+      sources: [s3deploy.Source.asset('./assets')],
+      destinationBucket: bucket,
+      distribution: websiteDistribution,
+      distributionPaths: ['/*'],
     });
   }
 }
 
 export function addCorsOptions(apiResource: apigateway.IResource) {
   apiResource.addMethod(
-    "OPTIONS",
-    new apigateway.MockIntegration({
-      integrationResponses: [
-        {
-          statusCode: "200",
-          responseParameters: {
-            "method.response.header.Access-Control-Allow-Headers":
-              "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
-            "method.response.header.Access-Control-Allow-Origin": "'*'",
-            "method.response.header.Access-Control-Allow-Credentials":
-              "'false'",
-            "method.response.header.Access-Control-Allow-Methods":
-              "'OPTIONS,GET,PUT,POST,DELETE'",
+      "OPTIONS",
+      new apigateway.MockIntegration({
+        integrationResponses: [
+          {
+            statusCode: "200",
+            responseParameters: {
+              "method.response.header.Access-Control-Allow-Headers":
+                  "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+              "method.response.header.Access-Control-Allow-Origin": "'*'",
+              "method.response.header.Access-Control-Allow-Credentials":
+                  "'false'",
+              "method.response.header.Access-Control-Allow-Methods":
+                  "'OPTIONS,GET,PUT,POST,DELETE'",
+            },
           },
+        ],
+        passthroughBehavior: apigateway.PassthroughBehavior.NEVER,
+        requestTemplates: {
+          "application/json": '{"statusCode": 200}',
         },
-      ],
-      passthroughBehavior: apigateway.PassthroughBehavior.NEVER,
-      requestTemplates: {
-        "application/json": '{"statusCode": 200}',
-      },
-    }),
-    {
-      methodResponses: [
-        {
-          statusCode: "200",
-          responseParameters: {
-            "method.response.header.Access-Control-Allow-Headers": true,
-            "method.response.header.Access-Control-Allow-Methods": true,
-            "method.response.header.Access-Control-Allow-Credentials": true,
-            "method.response.header.Access-Control-Allow-Origin": true,
+      }),
+      {
+        methodResponses: [
+          {
+            statusCode: "200",
+            responseParameters: {
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Credentials": true,
+              "method.response.header.Access-Control-Allow-Origin": true,
+            },
           },
-        },
-      ],
-    }
+        ],
+      }
   );
 }

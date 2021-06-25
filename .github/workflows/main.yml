@@ -11,9 +11,10 @@ jobs:
   aws_cdk:
     runs-on: ubuntu-latest
     steps:
+      - name: checkout
+      - uses: actions/checkout@v2
 
       - name: cdk diff
-      - uses: actions/checkout@v2
       - uses: youyo/aws-cdk-github-actions@v2
         with:
           cdk_subcommand: 'diff'

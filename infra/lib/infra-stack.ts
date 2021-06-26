@@ -6,6 +6,7 @@ import * as s3 from "@aws-cdk/aws-s3";
 import * as cloudfront from "@aws-cdk/aws-cloudfront";
 import * as iam from "@aws-cdk/aws-iam";
 import * as s3deploy from '@aws-cdk/aws-s3-deployment'
+import { Seeder } from 'aws-cdk-dynamodb-seeder';
 
 export class InfraStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -24,6 +25,13 @@ export class InfraStack extends cdk.Stack {
       removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
       readCapacity: 1,
       writeCapacity: 1
+    });
+
+    new Seeder(this, "dynamoTableSeeder", {
+        table: dynamoTable,
+        setup: require("./dynamoTableSeederUp.json"),
+        teardown: require("./dynamoTableSeederTearDown.json"),
+        refreshOnUpdate: true  // runs setup and teardown on every update, default false
     });
 
     const getQuestionLambda = new lambda.Function(this, "getQuestionFunction", {

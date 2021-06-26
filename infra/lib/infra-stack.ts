@@ -22,6 +22,8 @@ export class InfraStack extends cdk.Stack {
         type: dynamodb.AttributeType.STRING,
       },
       removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
+      readCapacity: 1,
+      writeCapacity: 1
     });
 
     const getQuestionLambda = new lambda.Function(this, "getQuestionFunction", {

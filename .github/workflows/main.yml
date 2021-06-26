@@ -12,8 +12,13 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
 
+      - name: Install Dependencies
+        working-directory: ./infra
+        run: npm install
+
       - name: build
-        run: cd infra; npm run build
+        working-directory: ./infra
+        run: npm run build
 
       - name: cdk diff
         uses: youyo/aws-cdk-github-actions@v2

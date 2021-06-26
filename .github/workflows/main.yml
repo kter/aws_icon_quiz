@@ -22,7 +22,7 @@ jobs:
 
       - name: Deploy
         working-directory: ./infra
-        run: cdk deploy --require-approval never
+        run: npm run cdk:deploy
         env:
           AWS_DEFAULT_REGION: 'ap-northeast-1'
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}

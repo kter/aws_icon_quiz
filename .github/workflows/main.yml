@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: build
-        run: npm run build
+        run: cd infra; npm run build
 
       - name: cdk diff
         uses: youyo/aws-cdk-github-actions@v2

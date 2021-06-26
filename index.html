@@ -10,7 +10,7 @@
 
   <body>
     <div id="app">
-      <router-link to="/top">トップページに戻る</router-link>
+      <router-link v-if="$route.path !== '/top'" to="/top">トップページに戻る</router-link>
       <router-view></router-view>
     </div>
 

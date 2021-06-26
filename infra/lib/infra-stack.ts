@@ -115,6 +115,7 @@ export class InfraStack extends cdk.Stack {
           errorCachingMinTtl: 0,
         },
       ],
+      defaultRootObject: "index.html"
     });
 
     new s3deploy.BucketDeployment(this, 'WebsiteDeploy', {

@@ -121,7 +121,7 @@ export class InfraStack extends cdk.Stack {
     new s3deploy.BucketDeployment(this, 'WebsiteDeploy', {
       sources: [
         s3deploy.Source.asset('./assets'),
-        s3deploy.Source.asset('../index.html'),
+        s3deploy.Source.asset('./index.html'),
       ],
       destinationBucket: bucket,
       distribution: websiteDistribution,

@@ -118,7 +118,17 @@ export class InfraStack extends cdk.Stack {
       defaultRootObject: "index.html"
     });
 
+
     new s3deploy.BucketDeployment(this, 'WebsiteDeploy', {
+      sources: [
+        s3deploy.Source.asset('./index.html')
+      ],
+      destinationBucket: bucket,
+      distribution: websiteDistribution,
+      distributionPaths: ['/*'],
+    });
+
+    new s3deploy.BucketDeployment(this, 'ImageDeploy', {
       sources: [
         s3deploy.Source.asset('./assets')
       ],

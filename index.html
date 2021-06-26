@@ -29,12 +29,12 @@
         <div>
             <h1>AWS Icon Quiz</h1>
             <form>
-                <div v-if="this.Questions[parseInt(this.$route.params.questionId)]">
+                <div v-if="this.Questions[parseInt(this.$route.params.questionId) - 1]">
                     <div>
-                        What's this service?: <img :src="'https://d1iwaq3xxqsfn2.cloudfront.net/' + this.Questions[parseInt(this.$route.params.questionId)].question + '.png'"/>
+                        What's this service?: <img :src="'https://d2bfuchdrzqduq.cloudfront.net/' + this.Questions[parseInt(this.$route.params.questionId) - 1].question + '.png'"/>
                     </div>
                     <div>
-                        <div v-for="answer in this.Questions[parseInt(this.$route.params.questionId)].answer" :key="answer">
+                        <div v-for="answer in this.Questions[parseInt(this.$route.params.questionId) - 1].answer" :key="answer">
                             <input type="radio" name="answer" :id="`${answer}`" :value="`${answer}`" v-model="playerAnswer" :key="`${$route.params.questionId}`">
                             <label :for="`${answer}`">{{ answer }}</label>
                         </div>

@@ -36,7 +36,7 @@
             <form>
                 <div v-if="this.Questions[parseInt(this.$route.params.questionId) - 1]">
                     <div>
-                        What's this service?: <img :src="'https://d2bfuchdrzqduq.cloudfront.net/' + this.Questions[parseInt(this.$route.params.questionId) - 1].question + '.png'"/>
+                        What's this service?: <img :src="'https://d2qbkgogbfv570.cloudfront.net/' + this.Questions[parseInt(this.$route.params.questionId) - 1].question + '.png'"/>
                     </div>
                     <div>
                         <div v-for="answer in this.Questions[parseInt(this.$route.params.questionId) - 1].answer" :key="answer">
@@ -151,7 +151,7 @@
                      * ]
                      */
                     axios
-                        .get('https://uwnbp575z0.execute-api.us-east-1.amazonaws.com/prod/questions')
+                        .get('https://l6zha71cbj.execute-api.ap-northeast-1.amazonaws.com/prod/questions')
                         .then(response => (this.Questions = response.data))
                 },
                 isLastQuestion: function () {

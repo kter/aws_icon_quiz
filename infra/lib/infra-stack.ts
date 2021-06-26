@@ -7,6 +7,9 @@ import * as cloudfront from "@aws-cdk/aws-cloudfront";
 import * as iam from "@aws-cdk/aws-iam";
 import * as s3deploy from '@aws-cdk/aws-s3-deployment'
 import { Seeder } from 'aws-cdk-dynamodb-seeder';
+import * as route53 from '@aws-cdk/aws-route53'
+import * as route53Targets from '@aws-cdk/aws-route53-targets'
+import * as certManager from '@aws-cdk/aws-certificatemanager'
 
 export class InfraStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -79,14 +82,29 @@ export class InfraStack extends cdk.Stack {
 
     bucket.addToResourcePolicy(myBucketPolicy);
 
+    // 使用する Route 53 ホストゾーンの定義
+    const rootDomain = 'tomohiko.io'
+    const deployDomain = `aws-icon-quiz.${rootDomain}`
+
+    const hostedZone = route53.HostedZone.fromLookup(this, 'HostedZone', {
+      domainName: `${rootDomain}.`,
+    })
+
+    // TLS証明書を作る
+    const cert = new certManager.DnsValidatedCertificate(this, 'Certificate', {
+      domainName: rootDomain,
+      subjectAlternativeNames: [`*.${rootDomain}`],
+      hostedZone,
+      region: 'us-east-1',
+    })
+
     // Create CloudFront WebDistribution
     const websiteDistribution = new cloudfront.CloudFrontWebDistribution(this, "WebsiteDistribution", {
-      viewerCertificate: {
-        aliases: [],
-        props: {
-          cloudFrontDefaultCertificate: true,
-        },
-      },
+      viewerCertificate: cloudfront.ViewerCertificate.fromAcmCertificate(cert, {
+        aliases: [deployDomain],
+        securityPolicy: cloudfront.SecurityPolicyProtocol.TLS_V1,
+        sslMethod: cloudfront.SSLMethod.SNI,
+      }),
       priceClass: cloudfront.PriceClass.PRICE_CLASS_ALL,
       originConfigs: [
         {
@@ -117,6 +135,17 @@ export class InfraStack extends cdk.Stack {
       ],
       defaultRootObject: "index.html"
     });
+    // Route 53 でレコードを追加
+    const propsForRoute53Records = {
+      zone: hostedZone,
+      recordName: deployDomain,
+      target: route53.RecordType.aliasTarget(
+        new route53Targets.CloudFrontTarget(websiteDistribution)
+      ),
+    }
+
+    new route53.ARecord(this, 'ARecord', propsForRoute53Records)
+    new route53.AaaaRecord(this, 'AaaaRecord', propsForRoute53Records)
 
     new s3deploy.BucketDeployment(this, 'WebsiteDeploy', {
       sources: [

@@ -144,7 +144,7 @@ export class InfraStack extends cdk.Stack {
     //   ),
     // };
 
-    new route53.ARecord(this, 'ARecord', propsForRoute53Records)
+    // new route53.ARecord(this, 'ARecord', propsForRoute53Records)
 
     new s3deploy.BucketDeployment(this, 'WebsiteDeploy', {
       sources: [

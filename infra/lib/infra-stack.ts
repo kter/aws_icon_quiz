@@ -139,13 +139,12 @@ export class InfraStack extends cdk.Stack {
     const propsForRoute53Records = {
       zone: hostedZone,
       recordName: deployDomain,
-      target: route53.RecordType.aliasTarget(
+      target: route53.RecordTarget.fromAlias(
         new route53Targets.CloudFrontTarget(websiteDistribution)
       ),
     }
 
-    new route53.ARecord(this, 'ARecord', propsForRoute53Records)
-    new route53.AaaaRecord(this, 'AaaaRecord', propsForRoute53Records)
+    new route53.ARecord(this, 'AliasRecord', propsForRoute53Records)
 
     new s3deploy.BucketDeployment(this, 'WebsiteDeploy', {
       sources: [

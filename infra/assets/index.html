@@ -15,7 +15,7 @@
 
   <body>
     <div id="app">
-      <router-link v-if="$route.path !== '/top'" to="/top">トップページに戻る</router-link>
+      <router-link v-if="$route.path !== '/'" to="/">トップページに戻る</router-link>
       <router-view></router-view>
     </div>
 
@@ -195,7 +195,7 @@
         var router = new VueRouter({
             routes: [
                 {
-                    path: '/top',
+                    path: '/',
                     name: 'top',
                     component: topPage
                 },

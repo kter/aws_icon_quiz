@@ -25,48 +25,77 @@
     </div>
 
     <script type="text/x-template" id="top">
-      <div>
-        <h1>AWS Icon Quiz</h1>
         <div>
-          <router-link :to="{ name: 'questions', params: { questionId: 1 }}">
-            はじめる
-          </router-link>
+            <v-app>
+                <v-app-bar
+                    flat
+                    dense
+                    height="22px"
+                    color="orange"
+                    app
+                >
+                <v-toolbar-title>AWS Icon Quiz</v-toolbar-title>
+                </v-app-bar>
+
+                <v-main>
+                    <div>
+                      <router-link :to="{ name: 'questions', params: { questionId: 1 }}">
+                        Start
+                      </router-link>
+                    </div>
+                </v-main>
+            </v-app>
         </div>
-      </div>
     </script>
 
     <script type="text/x-template" id="questions">
         <div>
-            <h1>AWS Icon Quiz</h1>
-            <form>
-                <div v-if="this.Questions[parseInt(this.$route.params.questionId) - 1]">
+            <v-app>
+                <v-app-bar
+                    flat
+                    dense
+                    height="22px"
+                    color="orange"
+                    app
+                >
+                    
+                    <v-toolbar-title><router-link to="/">AWS Icon Quiz {{questionNumber}} </router-link></v-toolbar-title>
+                </v-app-bar>
+
+                <v-main>
                     <div>
-                        What's this service?: <img :src="'https://d2qbkgogbfv570.cloudfront.net/' + this.Questions[parseInt(this.$route.params.questionId) - 1].question + '.png'"/>
+                        <form>
+                            <div v-if="this.Questions[parseInt(this.$route.params.questionId) - 1]">
+                                <div>
+                                    <img :src="'https://d2qbkgogbfv570.cloudfront.net/' + this.Questions[parseInt(this.$route.params.questionId) - 1].question + '.png'"/>
+                                </div>
+                                <div>
+                                    <div v-for="answer in this.Questions[parseInt(this.$route.params.questionId) - 1].answer" :key="answer">
+                                        <input type="radio" name="answer" :id="`${answer}`" :value="`${answer}`" v-model="playerAnswer" :key="`${$route.params.questionId}`">
+                                        <label :for="`${answer}`">{{ answer }}</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-if="isLastQuestion()">
+                                <router-link :to="{ name: 'result' }">
+                                    答え合わせ
+                                </router-link>
+                            </div>
+                            <div v-else>
+                                <span v-if="! isFirstQuestion()">
+                                    <router-link :to="{ name: 'questions', params: { questionId: parseInt(this.$route.params.questionId) - 1 }}">
+                                        Previous
+                                    </router-link>
+                                </span>
+                                &nbsp;&nbsp;/&nbsp;
+                                <router-link :to="{ name: 'questions', params: { questionId: parseInt(this.$route.params.questionId) + 1 }}">
+                                    Next
+                                </router-link>
+                            </div>
+                        </form>
                     </div>
-                    <div>
-                        <div v-for="answer in this.Questions[parseInt(this.$route.params.questionId) - 1].answer" :key="answer">
-                            <input type="radio" name="answer" :id="`${answer}`" :value="`${answer}`" v-model="playerAnswer" :key="`${$route.params.questionId}`">
-                            <label :for="`${answer}`">{{ answer }}</label>
-                        </div>
-                    </div>
-                </div>
-                <div v-if="isLastQuestion()">
-                    <router-link :to="{ name: 'result' }">
-                        答え合わせ
-                    </router-link>
-                </div>
-                <div v-else>
-                    <span v-if="! isFirstQuestion()">
-                        <router-link :to="{ name: 'questions', params: { questionId: parseInt(this.$route.params.questionId) - 1 }}">
-                            Previous
-                        </router-link>
-                    </span>
-                    &nbsp;&nbsp;/&nbsp;
-                    <router-link :to="{ name: 'questions', params: { questionId: parseInt(this.$route.params.questionId) + 1 }}">
-                        Next
-                    </router-link>
-                </div>
-            </form>
+                </v-main>
+            </v-app>
         </div>
     </script>
 
@@ -172,6 +201,9 @@
                 isFirstQuestion: function () {
                     return parseInt(this.$route.params.questionId) === 1
                 },
+                questionNumber: function () {
+                    return parseInt(this.$route.params.questionId)
+                }
             },
             store,
             computed: {

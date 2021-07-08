@@ -28,22 +28,25 @@
         <div>
             <v-app>
                 <v-app-bar
-                    flat
-                    dense
-                    height="22px"
-                    color="orange"
                     app
+                    color="orange"
                 >
-                <v-toolbar-title>AWS Icon Quiz</v-toolbar-title>
+                    <v-toolbar-title>
+                        <router-link to="/" class="text-decoration-none">
+                            AWS Icon Quiz
+                        </router-link>
+                    </v-toolbar-title>
                 </v-app-bar>
-
-                <v-main>
-                    <div>
-                      <router-link :to="{ name: 'questions', params: { questionId: 1 }}">
-                        Start
-                      </router-link>
-                    </div>
-                </v-main>
+                        <div class="mx-auto my-auto" color="white" width="500px" height="200px">
+                            <h1>
+                                Try Your Knowledge of AWS Icons!
+                            </h1>
+                            <div class="mx-auto my-auto text-center">
+                                <router-link :to="{ name: 'questions', params: { questionId: 1 }}">
+                                    Start Quiz
+                                </router-link>
+                            </div>
+                        </div>
             </v-app>
         </div>
     </script>
@@ -52,14 +55,16 @@
         <div>
             <v-app>
                 <v-app-bar
-                    flat
-                    dense
-                    height="22px"
-                    color="orange"
                     app
+                    color="orange"
                 >
-                    
-                    <v-toolbar-title><router-link to="/">AWS Icon Quiz {{questionNumber}} </router-link></v-toolbar-title>
+                    <v-toolbar-title>
+                        <router-link to="/">
+                            AWS Icon Quiz
+                        </router-link>
+                    </v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    {{questionNumber()}} / 5
                 </v-app-bar>
 
                 <v-main>

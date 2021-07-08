@@ -37,16 +37,18 @@
                         </router-link>
                     </v-toolbar-title>
                 </v-app-bar>
-                        <div class="mx-auto my-auto" color="white" width="500px" height="200px">
-                            <h1>
-                                Try Your Knowledge of AWS Icons!
-                            </h1>
-                            <div class="mx-auto my-auto text-center">
-                                <router-link :to="{ name: 'questions', params: { questionId: 1 }}">
-                                    Start Quiz
-                                </router-link>
-                            </div>
-                        </div>
+                <div class="mx-auto my-auto" color="white" width="500px" height="200px">
+                    <h1>
+                        Try Your Knowledge of AWS Icons!
+                    </h1>
+                    <div class="mx-auto my-auto text-center">
+                        <router-link :to="{ name: 'questions', params: { questionId: 1 }}">
+                            <h2>
+                                Start Quiz
+                            </h2>
+                        </router-link>
+                    </div>
+                </div>
             </v-app>
         </div>
     </script>
@@ -59,7 +61,7 @@
                     color="orange"
                 >
                     <v-toolbar-title>
-                        <router-link to="/">
+                        <router-link to="/" class="text-decoration-none">
                             AWS Icon Quiz
                         </router-link>
                     </v-toolbar-title>
@@ -67,11 +69,10 @@
                     {{questionNumber()}} / 5
                 </v-app-bar>
 
-                <v-main>
-                    <div>
+                    <div class="mx-auto my-auto" color="white" width="500px" height="200px">
                         <form>
                             <div v-if="this.Questions[parseInt(this.$route.params.questionId) - 1]">
-                                <div>
+                                <div class="mb-1 text-center">
                                     <img :src="'https://d2qbkgogbfv570.cloudfront.net/' + this.Questions[parseInt(this.$route.params.questionId) - 1].question + '.png'"/>
                                 </div>
                                 <div>
@@ -81,12 +82,12 @@
                                     </div>
                                 </div>
                             </div>
-                            <div v-if="isLastQuestion()">
+                            <div v-if="isLastQuestion()" class="text-center">
                                 <router-link :to="{ name: 'result' }">
                                     答え合わせ
                                 </router-link>
                             </div>
-                            <div v-else>
+                            <div v-else class="text-center">
                                 <span v-if="! isFirstQuestion()">
                                     <router-link :to="{ name: 'questions', params: { questionId: parseInt(this.$route.params.questionId) - 1 }}">
                                         Previous
@@ -99,7 +100,6 @@
                             </div>
                         </form>
                     </div>
-                </v-main>
             </v-app>
         </div>
     </script>

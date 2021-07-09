@@ -66,7 +66,7 @@
                         </router-link>
                     </v-toolbar-title>
                     <v-spacer></v-spacer>
-                    {{questionNumber()}} / 5
+                    {{questionNumber()}} / 20
                 </v-app-bar>
 
                     <div class="mx-auto my-auto" color="white" width="500px" height="200px">
@@ -122,10 +122,10 @@
                         Your Score is
                     </h2>
                     <h1 class="mx-auto my-auto text-center mb-2">
-                        {{ getScore() }} / 5
+                        {{ getScore() }} / 20
                     </h1>
                     <div class="text-center">
-                        <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" data-hashtags="awsiconquiz" data-url="https://aws-icon-quiz.tomohiko.io/" class="twitter-share-button" data-size="large" :data-text="'My Score is ... ' + getScore() + ' / 5!'" data-show-count="false">Tweet</a>
+                        <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" data-hashtags="awsiconquiz" data-url="https://aws-icon-quiz.tomohiko.io/" class="twitter-share-button" data-size="large" :data-text="'My Score is ... ' + getScore() + ' / 20!'" data-show-count="false">Tweet</a>
                         <br />
                         <br />
                         <router-link to="/" class="text-decoration-none">
@@ -139,7 +139,7 @@
     </script>
 
     <script>
-        const question_num = 5;
+        const question_num = 20;
         /*
          * Store
          */

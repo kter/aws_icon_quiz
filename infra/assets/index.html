@@ -129,7 +129,7 @@
                         <br />
                         <br />
                         <router-link to="/" class="text-decoration-none">
-                            Return top
+                            Return to Top
                         </router-link>
                         <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
                     </div>
@@ -281,25 +281,4 @@
         }).$mount('#app')
     </script>
   </body>
-<!-- TODO: $routesに依存しているコンポーネントをpropsを使ってこのコンポーネントを使い回せるようにする -->
-<!-- TODO: コンポーネントを複数のファイルに分割する
-import Home from '@/views/Home'
-import Product from '@/views/Product'
-// Vuexと同様で最初にプラグインとして登録
-Vue.use(VueRouter)
-// VueRouterインスタンスを生成する
-const router = new VueRouter({
-  // URLのパスと紐づくコンポーネントをマッピング
-  routes: [
-    {
-      path: '/',
-      component: Home
-    },
-    {
-      path: '/product',
-      component: Product
-    }
-  ]
-})
--->
 </html>

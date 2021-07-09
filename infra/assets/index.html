@@ -4,13 +4,18 @@
     <meta charset="utf-8"/>
     <meta property="og:url" content="https://aws-icon-quiz.tomohiko.io" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="AWSアイコンクイズ" />
-    <meta property="og:description" content="AWSのアイコンクイズ！あなたは何問正解できる？" />
-    <meta property="og:image" content="https://via.placeholder.com/150/" />
+    <meta property="og:title" content="AWS Icon Quiz" />
+    <meta property="og:description" content="Try Your Knowledge of AWS Icons!" />
+    <!-- <meta property="og:image" content="https://via.placeholder.com/150/" /> -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue-router/dist/vue-router.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vuex/dist/vuex.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
   </head>
 
   <body>
@@ -20,68 +25,116 @@
     </div>
 
     <script type="text/x-template" id="top">
-      <div>
-        <h1>AWS Icon Quiz</h1>
         <div>
-          <router-link :to="{ name: 'questions', params: { questionId: 1 }}">
-            はじめる
-          </router-link>
+            <v-app>
+                <v-app-bar
+                    app
+                    color="orange"
+                >
+                    <v-toolbar-title>
+                        <router-link to="/" class="text-decoration-none">
+                            AWS Icon Quiz
+                        </router-link>
+                    </v-toolbar-title>
+                </v-app-bar>
+                <div class="mx-auto my-auto" color="white" width="500px" height="200px">
+                    <h1>
+                        Try Your Knowledge of AWS Icons!
+                    </h1>
+                    <div class="mx-auto my-auto text-center">
+                        <router-link :to="{ name: 'questions', params: { questionId: 1 }}">
+                            <h2>
+                                Start Quiz
+                            </h2>
+                        </router-link>
+                    </div>
+                </div>
+            </v-app>
         </div>
-      </div>
     </script>
 
     <script type="text/x-template" id="questions">
         <div>
-            <h1>AWS Icon Quiz</h1>
-            <form>
-                <div v-if="this.Questions[parseInt(this.$route.params.questionId) - 1]">
-                    <div>
-                        What's this service?: <img :src="'https://d2qbkgogbfv570.cloudfront.net/' + this.Questions[parseInt(this.$route.params.questionId) - 1].question + '.png'"/>
-                    </div>
-                    <div>
-                        <div v-for="answer in this.Questions[parseInt(this.$route.params.questionId) - 1].answer" :key="answer">
-                            <input type="radio" name="answer" :id="`${answer}`" :value="`${answer}`" v-model="playerAnswer" :key="`${$route.params.questionId}`">
-                            <label :for="`${answer}`">{{ answer }}</label>
-                        </div>
-                    </div>
-                </div>
-                <div v-if="isLastQuestion()">
-                    <router-link :to="{ name: 'result' }">
-                        答え合わせ
-                    </router-link>
-                </div>
-                <div v-else>
-                    <span v-if="! isFirstQuestion()">
-                        <router-link :to="{ name: 'questions', params: { questionId: parseInt(this.$route.params.questionId) - 1 }}">
-                            Previous
+            <v-app>
+                <v-app-bar
+                    app
+                    color="orange"
+                >
+                    <v-toolbar-title>
+                        <router-link to="/" class="text-decoration-none">
+                            AWS Icon Quiz
                         </router-link>
-                    </span>
-                    &nbsp;&nbsp;/&nbsp;
-                    <router-link :to="{ name: 'questions', params: { questionId: parseInt(this.$route.params.questionId) + 1 }}">
-                        Next
-                    </router-link>
-                </div>
-            </form>
+                    </v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    {{questionNumber()}} / 5
+                </v-app-bar>
+
+                    <div class="mx-auto my-auto" color="white" width="500px" height="200px">
+                        <form>
+                            <div v-if="this.Questions[parseInt(this.$route.params.questionId) - 1]">
+                                <div class="mb-1 text-center">
+                                    <img :src="'https://d2qbkgogbfv570.cloudfront.net/' + this.Questions[parseInt(this.$route.params.questionId) - 1].question + '.png'"/>
+                                </div>
+                                <div class="mb-2">
+                                    <div v-for="answer in this.Questions[parseInt(this.$route.params.questionId) - 1].answer" :key="answer">
+                                        <input type="radio" name="answer" :id="`${answer}`" :value="`${answer}`" v-model="playerAnswer" :key="`${$route.params.questionId}`">
+                                        <label :for="`${answer}`">{{ answer }}</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-if="isLastQuestion()" class="text-center">
+                                <router-link :to="{ name: 'result' }">
+                                    答え合わせ
+                                </router-link>
+                            </div>
+                            <div v-else class="text-center">
+                                <span v-if="! isFirstQuestion()">
+                                    <router-link :to="{ name: 'questions', params: { questionId: parseInt(this.$route.params.questionId) - 1 }}">
+                                        Previous
+                                    </router-link>
+                                </span>
+                                &nbsp;&nbsp;/&nbsp;
+                                <router-link :to="{ name: 'questions', params: { questionId: parseInt(this.$route.params.questionId) + 1 }}">
+                                    Next
+                                </router-link>
+                            </div>
+                        </form>
+                    </div>
+            </v-app>
         </div>
     </script>
 
     <script type="text/x-template" id="result">
         <div>
-            <div>
-                結果発表
-            </div>
-            <div>
-                あなたの得点は…
-                <div>
-                    5問中 {{ getScore() }}問正解
+            <v-app>
+                <v-app-bar
+                    app
+                    color="orange"
+                >
+                    <v-toolbar-title>
+                        <router-link to="/" class="text-decoration-none">
+                            AWS Icon Quiz
+                        </router-link>
+                    </v-toolbar-title>
+                </v-app-bar>
+                <div class="mx-auto my-auto" color="white" width="500px" height="200px">
+                    <h2>
+                        Your Score is
+                    </h2>
+                    <h1 class="mx-auto my-auto text-center mb-2">
+                        {{ getScore() }} / 5
+                    </h1>
+                    <div class="text-center">
+                        <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" data-hashtags="awsiconquiz" data-url="https://aws-icon-quiz.tomohiko.io/" class="twitter-share-button" data-size="large" :data-text="'My Score is ... ' + getScore() + ' / 5!'" data-show-count="false">Tweet</a>
+                        <br />
+                        <br />
+                        <router-link to="/" class="text-decoration-none">
+                            Return top
+                        </router-link>
+                        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                    </div>
                 </div>
-                でした！
-            </div>
-            <div>
-                Twitterで共有する
-                <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-size="large" data-text="私のAWSアイコンクイズの結果は…5問中{{ getScore() }}問正解でした！" data-show-count="false">Tweet</a>
-                <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-            </div>
+            </v-app>
         </div>
     </script>
 
@@ -167,6 +220,9 @@
                 isFirstQuestion: function () {
                     return parseInt(this.$route.params.questionId) === 1
                 },
+                questionNumber: function () {
+                    return parseInt(this.$route.params.questionId)
+                }
             },
             store,
             computed: {
@@ -221,6 +277,7 @@
 
         var vm = new Vue({
             router: router,
+            vuetify: new Vuetify(),
         }).$mount('#app')
     </script>
   </body>
